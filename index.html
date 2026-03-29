@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Test — Classroom Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f0eef8;
+  --surface:#ffffff;
+  --surface2:#f7f5ff;
+  --ink:#120e2b;
+  --ink2:#4a4570;
+  --ink3:#8f8aaa;
+  --accent:#6c47ff;
+  --accent-light:#ede8ff;
+  --green:#00c2a8;
+  --green-light:#e0f9f5;
+  --border:#e2dff5;
+  --radius:20px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+  --shadow:0 2px 20px rgba(108,71,255,.08);
+  --shadow-lg:0 12px 48px rgba(108,71,255,.14);
+}
+
+html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* ── BG DECORATION ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 10% 20%, rgba(108,71,255,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 90% 80%, rgba(0,194,168,.06) 0%, transparent 70%);
+  pointer-events:none;z-index:0
+}
+
+#app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:40px 20px 60px}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:60px 20px 52px;animation:fadeUp .6s ease}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-pill);padding:6px 16px;font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:24px;box-shadow:var(--shadow)}
+.hero-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(108,71,255,.4)}50%{box-shadow:0 0 0 6px rgba(108,71,255,0)}}
+
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(42px,8vw,80px);font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--ink);margin-bottom:8px}
+.hero-title span{color:var(--accent)}
+.hero-subtitle{font-family:'Syne',sans-serif;font-size:clamp(14px,2.5vw,20px);font-weight:600;color:var(--ink3);letter-spacing:.5px;margin-bottom:20px;text-transform:uppercase}
+.hero-desc{font-size:clamp(14px,2vw,17px);color:var(--ink2);line-height:1.8;max-width:540px;margin:0 auto 40px}
+
+/* ── CHANNEL BADGE ── */
+.channel-strip{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:56px}
+.ch-badge{background:var(--ink);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;padding:5px 14px;border-radius:6px}
+.ch-sep{color:var(--border);font-size:16px}
+.ch-year{font-size:12px;color:var(--ink3);font-weight:500}
+
+/* ── VERSION CARDS ── */
+.versions{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px}
+@media(max-width:640px){.versions{grid-template-columns:1fr}}
+
+.version-card{background:var(--surface);border-radius:var(--radius);padding:32px 28px 28px;box-shadow:var(--shadow);border:2px solid transparent;transition:all .25s;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;animation:fadeUp .6s ease both}
+.version-card:nth-child(2){animation-delay:.1s}
+.version-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.version-card.oral:hover{border-color:var(--accent)}
+.version-card.written:hover{border-color:var(--green)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.card-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.oral .card-icon{background:var(--accent-light)}
+.written .card-icon{background:var(--green-light)}
+.card-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:var(--radius-pill)}
+.oral .card-tag{background:var(--accent-light);color:var(--accent)}
+.written .card-tag{background:var(--green-light);color:var(--green)}
+
+.card-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.4px;margin-bottom:8px}
+.card-desc{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:24px;flex:1}
+
+.card-features{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:8px}
+.card-features li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)}
+.feat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.oral .feat-dot{background:var(--accent)}
+.written .feat-dot{background:var(--green)}
+
+.card-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:var(--radius-pill);font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:.2px;transition:all .2s;border:none;cursor:pointer;text-decoration:none}
+.oral .card-btn{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(108,71,255,.3)}
+.oral .card-btn:hover{background:#5a38e8;box-shadow:0 6px 24px rgba(108,71,255,.4)}
+.written .card-btn{background:var(--green);color:#fff;box-shadow:0 4px 16px rgba(0,194,168,.25)}
+.written .card-btn:hover{background:#00a88e;box-shadow:0 6px 24px rgba(0,194,168,.35)}
+.btn-arrow{transition:transform .2s}
+.version-card:hover .btn-arrow{transform:translateX(4px)}
+
+/* ── COMMON FEATURES ── */
+.common{background:var(--surface);border-radius:var(--radius);padding:28px 32px;margin-bottom:40px;box-shadow:var(--shadow);animation:fadeUp .6s .2s ease both}
+.common-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px}
+.common-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.common-item{display:flex;align-items:flex-start;gap:12px}
+.common-item-icon{width:36px;height:36px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1.5px solid var(--border)}
+.common-item-text{font-size:13px;color:var(--ink2);line-height:1.6}
+.common-item-text strong{display:block;font-weight:600;color:var(--ink);margin-bottom:2px;font-size:13px}
+
+/* ── CATEGORIES STRIP ── */
+.cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:48px;animation:fadeUp .6s .3s ease both}
+.cat-chip{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;border:1.5px solid transparent}
+.cat-chip.faith{background:#fff8e6;color:#b36a00;border-color:#f5d48a}
+.cat-chip.power{background:#ffe8f0;color:#b30040;border-color:#f5a0be}
+.cat-chip.self{background:#ede8ff;color:#5234c4;border-color:#c5b8ff}
+.cat-chip.world{background:#e0f9f5;color:#007a66;border-color:#8addd4}
+.cat-chip.dark{background:#1e1529;color:#c084fc;border-color:#6b3f8a}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding-top:20px;border-top:1.5px solid var(--border)}
+.footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.footer-logo span{color:var(--accent)}
+.footer-sub{font-size:12px;color:var(--ink3);line-height:1.7}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Pedagogical game · English oral &amp; writing
+    </div>
+    <div class="hero-title">Star <span>Test</span></div>
+    <div class="hero-subtitle">Classroom Edition</div>
+    <div class="hero-desc">
+      An interview game inspired by the cult Channel 4 show (1989–1991).
+      A random wheel picks a student, who chooses a category and a question number — then answers live in English.
+    </div>
+    <div class="channel-strip">
+      <div class="ch-badge">CHANNEL 4</div>
+      <div class="ch-sep">·</div>
+      <div class="ch-year">Original show 1989 – 1991</div>
+      <div class="ch-sep">·</div>
+      <div class="ch-year">Classroom adaptation 2025</div>
+    </div>
+  </div>
+
+  <!-- VERSION CARDS -->
+  <div class="versions">
+
+    <a href="oral.html" class="version-card oral">
+      <div class="card-top">
+        <div class="card-icon">🎤</div>
+        <div class="card-tag">Oral</div>
+      </div>
+      <div class="card-title">Oral version</div>
+      <div class="card-desc">
+        The selected student answers the question out loud in English.
+        The teacher validates the response directly on screen.
+      </div>
+      <ul class="card-features">
+        <li><span class="feat-dot"></span>Spin-wheel student selector</li>
+        <li><span class="feat-dot"></span>5 categories, 80+ questions</li>
+        <li><span class="feat-dot"></span>Teacher validates: Great / Partial / Skip</li>
+        <li><span class="feat-dot"></span>Live session transcript</li>
+      </ul>
+      <div class="card-btn">Open oral version <span class="btn-arrow">→</span></div>
+    </a>
+
+    <a href="written.html" class="version-card written">
+      <div class="card-top">
+        <div class="card-icon">✍️</div>
+        <div class="card-tag">Written</div>
+      </div>
+      <div class="card-title">Written version</div>
+      <div class="card-desc">
+        The student types their answer directly on screen.
+        A configurable word-count threshold must be reached before submitting.
+      </div>
+      <ul class="card-features">
+        <li><span class="feat-dot"></span>Spin-wheel student selector</li>
+        <li><span class="feat-dot"></span>5 categories, 80+ questions</li>
+        <li><span class="feat-dot"></span>Live word counter + progress bar</li>
+        <li><span class="feat-dot"></span>Adjustable minimum word count</li>
+      </ul>
+      <div class="card-btn">Open written version <span class="btn-arrow">→</span></div>
+    </a>
+
+  </div>
+
+  <!-- COMMON FEATURES -->
+  <div class="common">
+    <div class="common-title">Both versions include</div>
+    <div class="common-grid">
+      <div class="common-item">
+        <div class="common-item-icon">🎡</div>
+        <div class="common-item-text"><strong>Spin-wheel draw</strong>Colourful animated wheel, students disappear once they've played</div>
+      </div>
+      <div class="common-item">
+        <div class="common-item-icon">📋</div>
+        <div class="common-item-text"><strong>Class management</strong>Add students one by one or paste a full list in one go</div>
+      </div>
+      <div class="common-item">
+        <div class="common-item-icon">🔢</div>
+        <div class="common-item-text"><strong>Mystery number pick</strong>Students choose a number without seeing the question first</div>
+      </div>
+      <div class="common-item">
+        <div class="common-item-icon">📊</div>
+        <div class="common-item-text"><strong>Session transcript</strong>Full log of all students, questions and results</div>
+      </div>
+      <div class="common-item">
+        <div class="common-item-icon">📁</div>
+        <div class="common-item-text"><strong>Standalone file</strong>No server, no login, no internet required once loaded</div>
+      </div>
+      <div class="common-item">
+        <div class="common-item-icon">📱</div>
+        <div class="common-item-text"><strong>Responsive design</strong>Works on PC, tablet and interactive whiteboard</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cats">
+    <div class="cat-chip faith">✦ Faith &amp; Fortune</div>
+    <div class="cat-chip power">⬡ Power &amp; Achievement</div>
+    <div class="cat-chip self">○ Identity &amp; Self</div>
+    <div class="cat-chip world">◻ Society &amp; World</div>
+    <div class="cat-chip dark">🕵️ Dark Secrets</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Star <span>Test</span> · Classroom Edition</div>
+    <div class="footer-sub">
+      Inspired by the Channel 4 television programme (1989–1991)<br>
+      Adapted for secondary school English classes · All questions are school-appropriate
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

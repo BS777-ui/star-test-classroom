@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Test — Classroom (Written)</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f0eef8;
+  --surface:#ffffff;
+  --surface2:#f7f5ff;
+  --ink:#120e2b;
+  --ink2:#4a4570;
+  --ink3:#8f8aaa;
+  --accent:#6c47ff;
+  --accent2:#ff4d8d;
+  --accent3:#00c2a8;
+  --accent4:#ffb800;
+  --accent5:#ff6b35;
+  --border:#e2dff5;
+  --shadow:0 2px 16px rgba(108,71,255,.08);
+  --shadow-lg:0 8px 40px rgba(108,71,255,.14);
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-pill:999px;
+  --faith-bg:#fff8e6;--faith:#e8920a;
+  --power-bg:#ffe8f0;--power:#e8195a;
+  --self-bg:#ede8ff;--self:#6c47ff;
+  --world-bg:#e0f9f5;--world:#00a88e;
+  --dark-bg:#1e1529;--dark:#c084fc;
+}
+
+html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
+
+#app{max-width:1060px;margin:0 auto;padding:20px 16px;min-height:100vh;display:flex;flex-direction:column}
+
+/* ── HEADER ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:0 0 20px;flex-wrap:wrap;gap:12px}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo-icon{width:40px;height:40px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-text{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.5px}
+.logo-text span{color:var(--accent)}
+.logo-sub{font-size:11px;color:var(--ink3);letter-spacing:.5px;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chip{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-pill);padding:5px 14px;font-size:12px;color:var(--ink2);font-weight:500}
+.chip.active-class{background:var(--accent);border-color:var(--accent);color:#fff}
+#header-timer{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink3)}
+
+/* ── TABS ── */
+.tabs-wrap{background:var(--surface);border-radius:var(--radius-pill);padding:4px;display:inline-flex;gap:4px;margin-bottom:24px;box-shadow:var(--shadow)}
+.tab{border:none;background:transparent;padding:9px 24px;border-radius:var(--radius-pill);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink3);cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab.active{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(108,71,255,.3)}
+.tab:hover:not(.active){color:var(--ink);background:var(--surface2)}
+
+/* ── SCREENS ── */
+.screen{display:none;animation:up .3s ease}
+.screen.active{display:block}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── TEACHER PANEL ── */
+#teacher-panel{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:680px){#teacher-panel{grid-template-columns:1fr}}
+
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+.field-label{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:block}
+.field-row{display:flex;gap:8px;margin-bottom:16px}
+input[type=text],textarea{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 14px;outline:none;transition:border-color .2s;width:100%}
+input[type=text]:focus,textarea:focus{border-color:var(--accent)}
+input[type=text]::placeholder,textarea::placeholder{color:var(--ink3)}
+textarea{resize:vertical;min-height:80px;font-size:12px;line-height:1.6}
+
+.btn{border:none;border-radius:var(--radius-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px 18px;cursor:pointer;transition:all .18s;white-space:nowrap;letter-spacing:.2px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(108,71,255,.25)}
+.btn-primary:hover{background:#5a38e8}
+.btn-ghost{background:var(--surface2);color:var(--ink2);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:#fff0f3;color:var(--accent2);border:1.5px solid #ffd5e0}
+.btn-danger:hover{background:#ffe0e8}
+.btn-big{width:100%;padding:14px;font-size:14px;border-radius:var(--radius);margin-top:4px}
+
+#student-list{list-style:none;max-height:260px;overflow-y:auto;margin-bottom:12px}
+.student-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:var(--radius-sm);transition:background .15s;font-size:13px}
+.student-item:hover{background:var(--surface2)}
+.student-item.done .sname{text-decoration:line-through;color:var(--ink3)}
+.student-item.done::after{content:'✓';color:var(--accent3);font-weight:700;font-size:12px;margin-left:auto}
+.snum{color:var(--ink3);font-size:11px;font-weight:600;min-width:20px}
+.sname{flex:1;font-weight:500}
+.sdel{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:5px;transition:all .15s;line-height:1}
+.sdel:hover{background:#ffe0e8;color:var(--accent2)}
+.no-students{text-align:center;padding:28px 16px;color:var(--ink3);font-size:13px}
+.student-count-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.student-count{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.stat-box{background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;border:1.5px solid var(--border)}
+.stat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink)}
+.stat-label{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+.cat-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;margin-bottom:8px}
+
+/* ── WHEEL ── */
+#wheel-screen{display:flex;flex-direction:column;align-items:center}
+.game-heading{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--ink);text-align:center;margin-bottom:6px;letter-spacing:-.5px}
+.game-sub{font-size:14px;color:var(--ink3);text-align:center;margin-bottom:28px}
+#wheel-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:24px}
+#wheel-canvas{border-radius:50%;cursor:pointer;filter:drop-shadow(0 8px 32px rgba(108,71,255,.22))}
+#wheel-pointer{position:absolute;right:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:14px solid transparent;border-bottom:14px solid transparent;border-left:26px solid var(--accent);filter:drop-shadow(0 2px 6px rgba(108,71,255,.5))}
+#wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:#fff;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--ink2);cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+#wheel-center:hover{border-color:var(--accent);color:var(--accent)}
+#spin-result{min-height:72px;text-align:center;margin-bottom:20px}
+#result-name{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,42px);font-weight:800;color:var(--accent);letter-spacing:-.5px;display:none}
+#result-sub{font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+.spin-btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn-spin-main{background:var(--accent);color:#fff;font-size:15px;padding:14px 36px;border-radius:var(--radius-pill);box-shadow:0 6px 24px rgba(108,71,255,.3);font-family:'Syne',sans-serif;font-weight:800;border:none;cursor:pointer;transition:all .2s}
+.btn-spin-main:hover{background:#5a38e8;transform:translateY(-2px)}
+.btn-spin-main:active{transform:scale(.97)}
+.btn-continue{background:var(--ink);color:#fff;font-size:14px;padding:14px 28px;border-radius:var(--radius-pill);border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:800;transition:all .2s;display:none}
+.btn-continue:hover{background:#2a2050}
+
+/* ── CATEGORIES ── */
+.student-banner{background:var(--surface);border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--shadow)}
+.banner-label{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.banner-name{font-family:'Syne',sans-serif;font-size:clamp(18px,3vw,26px);font-weight:800;color:var(--ink);letter-spacing:-.3px}
+#cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cat-card{border-radius:var(--radius);padding:24px 20px;cursor:pointer;transition:all .22s;border:2px solid transparent;position:relative;overflow:hidden}
+.cat-card::after{content:'→';position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:20px;opacity:0;transition:all .2s}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.cat-card:hover::after{opacity:1;right:14px}
+.cat-card.used{opacity:.35;cursor:not-allowed;pointer-events:none}
+.cat-card[data-id=faith]{background:var(--faith-bg)}
+.cat-card[data-id=faith]:hover{border-color:var(--faith);box-shadow:0 8px 32px rgba(232,146,10,.2)}
+.cat-card[data-id=faith]::after{color:var(--faith)}
+.cat-card[data-id=power]{background:var(--power-bg)}
+.cat-card[data-id=power]:hover{border-color:var(--power);box-shadow:0 8px 32px rgba(232,25,90,.2)}
+.cat-card[data-id=power]::after{color:var(--power)}
+.cat-card[data-id=self]{background:var(--self-bg)}
+.cat-card[data-id=self]:hover{border-color:var(--self);box-shadow:0 8px 32px rgba(108,71,255,.2)}
+.cat-card[data-id=self]::after{color:var(--self)}
+.cat-card[data-id=world]{background:var(--world-bg)}
+.cat-card[data-id=world]:hover{border-color:var(--world);box-shadow:0 8px 32px rgba(0,168,142,.2)}
+.cat-card[data-id=world]::after{color:var(--world)}
+.cat-card[data-id=dark]{background:var(--dark-bg)}
+.cat-card[data-id=dark]:hover{border-color:var(--dark);box-shadow:0 8px 32px rgba(192,132,252,.3)}
+.cat-card[data-id=dark]::after{color:var(--dark)}
+.cat-card[data-id=dark] .cat-name{color:#f0e8ff}
+.cat-card[data-id=dark] .cat-count{color:#a78bcc}
+.cat-icon-wrap{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.faith .cat-icon-wrap{background:rgba(232,146,10,.15)}
+.power .cat-icon-wrap{background:rgba(232,25,90,.15)}
+.self .cat-icon-wrap{background:rgba(108,71,255,.15)}
+.world .cat-icon-wrap{background:rgba(0,168,142,.15)}
+.dark .cat-icon-wrap{background:rgba(192,132,252,.15)}
+.cat-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:5px}
+.cat-count{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px}
+
+/* ── NUMBER GRID ── */
+.num-header{background:var(--surface);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.num-cat-badge{padding:6px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;font-family:'Syne',sans-serif}
+.num-cat-badge.faith{background:var(--faith-bg);color:var(--faith)}
+.num-cat-badge.power{background:var(--power-bg);color:var(--power)}
+.num-cat-badge.self{background:var(--self-bg);color:var(--self)}
+.num-cat-badge.world{background:var(--world-bg);color:var(--world)}
+.num-cat-badge.dark{background:var(--dark-bg);color:var(--dark)}
+.num-prompt{font-size:13px;color:var(--ink3);text-align:center;margin-bottom:16px;font-weight:500}
+#num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:10px;margin-bottom:24px}
+.num-btn{aspect-ratio:1;background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-sm);color:var(--ink2);font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.num-btn:hover{border-color:var(--accent);color:var(--accent);transform:scale(1.06);box-shadow:0 4px 16px rgba(108,71,255,.2)}
+.num-btn.used{opacity:.2;cursor:not-allowed;pointer-events:none}
+
+/* ── QUESTION SCREEN ── */
+.q-banner{background:var(--surface);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;box-shadow:var(--shadow)}
+.q-progress-pill{background:var(--accent);color:#fff;border-radius:var(--radius-pill);padding:5px 14px;font-size:12px;font-weight:700;font-family:'Syne',sans-serif}
+.q-card{border-radius:var(--radius);padding:28px 32px 24px;margin-bottom:20px;box-shadow:var(--shadow-lg);position:relative}
+.q-card.faith{background:var(--faith-bg);border-top:4px solid var(--faith)}
+.q-card.power{background:var(--power-bg);border-top:4px solid var(--power)}
+.q-card.self{background:var(--self-bg);border-top:4px solid var(--self)}
+.q-card.world{background:var(--world-bg);border-top:4px solid var(--world)}
+.q-card.dark{background:var(--dark-bg);border-top:4px solid var(--dark)}
+.q-cat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.q-card.faith .q-cat-label{color:var(--faith)}
+.q-card.power .q-cat-label{color:var(--power)}
+.q-card.self .q-cat-label{color:var(--self)}
+.q-card.world .q-cat-label{color:var(--world)}
+.q-card.dark .q-cat-label{color:var(--dark)}
+#q-text{font-family:'Syne',sans-serif;font-size:clamp(18px,3vw,26px);font-weight:700;color:var(--ink);line-height:1.45;letter-spacing:-.3px;min-height:60px;margin-bottom:24px}
+.q-card.dark #q-text{color:#f0e8ff}
+.cursor{display:inline-block;width:3px;height:1em;background:var(--accent);vertical-align:middle;margin-left:3px;border-radius:2px;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── WRITTEN ANSWER ZONE ── */
+.answer-zone{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.answer-zone-header{padding:14px 20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.answer-zone-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:8px}
+.wc-badge{font-size:11px;font-weight:600;color:var(--ink3);background:var(--surface2);border-radius:var(--radius-pill);padding:3px 10px;border:1.5px solid var(--border)}
+#answer-textarea{width:100%;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.8;color:var(--ink);padding:20px;resize:none;min-height:160px;display:block}
+#answer-textarea::placeholder{color:var(--ink3)}
+.answer-zone-footer{padding:12px 20px;border-top:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--surface2)}
+.char-info{font-size:12px;color:var(--ink3);font-weight:500}
+.char-info span{color:var(--accent);font-weight:700}
+.submit-row{display:flex;gap:8px;align-items:center}
+
+/* word count progress bar */
+.wc-progress{height:4px;background:var(--border);border-radius:9px;overflow:hidden;margin-top:4px;width:120px}
+.wc-fill{height:100%;background:var(--accent);border-radius:9px;transition:width .3s;width:0%}
+
+/* submit button */
+.btn-submit{background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:11px 24px;border-radius:var(--radius-pill);border:none;cursor:pointer;box-shadow:0 4px 14px rgba(108,71,255,.25);transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-submit:hover{background:#5a38e8;transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-skip-q{background:var(--surface2);color:var(--ink3);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px 18px;border-radius:var(--radius-pill);border:1.5px solid var(--border);cursor:pointer;transition:all .2s}
+.btn-skip-q:hover{border-color:var(--ink3);color:var(--ink2)}
+
+/* min words hint */
+.min-hint{font-size:11px;color:var(--ink3);margin-top:6px;text-align:right;transition:color .2s}
+.min-hint.reached{color:var(--accent3);font-weight:600}
+
+/* ── RESULT SCREEN ── */
+.result-hero{border-radius:var(--radius);padding:28px 32px;margin-bottom:20px;box-shadow:var(--shadow-lg)}
+.result-hero.written{background:linear-gradient(135deg,#ede8ff,#d8d0ff);border:2px solid rgba(108,71,255,.2)}
+.result-hero.skip{background:var(--surface2);border:2px solid var(--border)}
+.result-emoji{font-size:48px;display:block;margin-bottom:10px}
+.result-verdict-label{font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,36px);font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.result-hero.written .result-verdict-label{color:var(--accent)}
+.result-hero.skip .result-verdict-label{color:var(--ink3)}
+.result-student-tag{display:inline-block;background:var(--surface);border-radius:var(--radius-pill);padding:6px 16px;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px}
+.result-message{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:14px}
+
+/* answer preview card */
+.answer-preview{background:var(--surface);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:10px;border-left:4px solid var(--accent)}
+.answer-preview-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.answer-preview-q{font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:8px;line-height:1.6}
+.answer-preview-text{font-size:14px;color:var(--ink);line-height:1.8;white-space:pre-wrap;font-family:'DM Sans',sans-serif}
+.answer-preview-meta{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.answer-meta-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--radius-pill);background:var(--self-bg);color:var(--self)}
+
+/* transcript */
+.transcript-header{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.transcript-item{background:var(--surface);border-radius:var(--radius-sm);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.ti-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1.5px solid var(--border);flex-wrap:wrap;gap:6px}
+.t-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink)}
+.t-meta{display:flex;align-items:center;gap:8px}
+.t-cat{font-size:11px;font-weight:600;padding:2px 10px;border-radius:var(--radius-pill)}
+.t-cat.faith{background:var(--faith-bg);color:var(--faith)}
+.t-cat.power{background:var(--power-bg);color:var(--power)}
+.t-cat.self{background:var(--self-bg);color:var(--self)}
+.t-cat.world{background:var(--world-bg);color:var(--world)}
+.t-cat.dark{background:#2d1f45;color:var(--dark)}
+.t-wc{font-size:11px;color:var(--ink3);font-weight:500}
+.ti-body{padding:10px 14px}
+.t-q-text{font-size:11px;color:var(--ink3);font-style:italic;margin-bottom:6px;line-height:1.5}
+.t-answer{font-size:13px;color:var(--ink2);line-height:1.7;white-space:pre-wrap}
+.t-skipped{font-size:12px;color:var(--ink3);font-style:italic}
+
+.result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.result-actions .btn{padding:13px 28px;font-size:13px;border-radius:var(--radius-pill)}
+
+/* footer */
+footer{display:flex;justify-content:space-between;align-items:center;padding:16px 0 4px;margin-top:auto;flex-wrap:wrap;gap:8px}
+#footer-progress{display:flex;gap:5px;flex-wrap:wrap}
+.fp-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:all .3s}
+.fp-dot.done{background:var(--accent3)}
+.fp-dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(108,71,255,.2);animation:blink 1.2s infinite}
+.footer-left{font-size:12px;font-weight:600;color:var(--ink3)}
+.footer-right{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">⭐</div>
+    <div>
+      <div class="logo-text">Star <span>Test</span></div>
+      <div class="logo-sub">Classroom Edition — Written answers</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="chip" id="class-chip">No class loaded</div>
+    <div id="header-timer">00:00</div>
+  </div>
+</header>
+
+<div class="tabs-wrap">
+  <button class="tab active" onclick="switchTab('teacher')" id="tab-teacher">⚙️ Setup</button>
+  <button class="tab" onclick="switchTab('game')" id="tab-game">🎮 Play</button>
+</div>
+
+<!-- ══ TEACHER ══ -->
+<div class="screen active" id="screen-teacher">
+  <div id="teacher-panel">
+    <div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon" style="background:#ede8ff">🏫</div>Class Setup</div>
+        <label class="field-label">Class name</label>
+        <div class="field-row" style="margin-bottom:20px">
+          <input type="text" id="class-name-input" placeholder="e.g. Terminale B" maxlength="30"/>
+          <button class="btn btn-primary" onclick="setClassName()">Set</button>
+        </div>
+        <label class="field-label">Add a student</label>
+        <div class="field-row">
+          <input type="text" id="student-input" placeholder="Student name…" maxlength="40" onkeydown="if(event.key==='Enter')addStudent()"/>
+          <button class="btn btn-primary" onclick="addStudent()">+ Add</button>
+        </div>
+        <label class="field-label">Or paste full list (one name per line)</label>
+        <textarea id="bulk-input" placeholder="Alice Martin&#10;Bob Dupont&#10;Claire Lefebvre&#10;…" style="margin-bottom:10px"></textarea>
+        <div class="field-row" style="margin-bottom:20px">
+          <button class="btn btn-primary" style="flex:1" onclick="importBulk()">Import list</button>
+          <button class="btn btn-danger" onclick="clearAll()">Clear all</button>
+        </div>
+        <div class="student-count-bar">
+          <span class="student-count" id="student-count">0 students</span>
+        </div>
+        <ul id="student-list"><li class="no-students">No students yet — add some above ☝️</li></ul>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon" style="background:#e0f9f5">📊</div>Session</div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-val" id="info-count">0</div><div class="stat-label">Total</div></div>
+          <div class="stat-box"><div class="stat-val" id="info-remaining">0</div><div class="stat-label">Remaining</div></div>
+          <div class="stat-box"><div class="stat-val" id="info-done">0</div><div class="stat-label">Done</div></div>
+          <div class="stat-box"><div class="stat-val" id="info-class" style="font-size:14px;margin-top:4px">—</div><div class="stat-label">Class</div></div>
+        </div>
+
+        <!-- Min words setting -->
+        <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;border:1.5px solid var(--border)">
+          <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">✍️ Minimum words required</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="range" id="min-words-slider" min="5" max="80" value="20" step="5" style="flex:1;accent-color:var(--accent)" oninput="updateMinWords()"/>
+            <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);min-width:36px;text-align:right" id="min-words-display">20</div>
+            <div style="font-size:11px;color:var(--ink3)">words</div>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:6px">Students must reach this threshold before submitting.</div>
+        </div>
+
+        <button class="btn btn-primary btn-big" onclick="startGame()">▶ Launch game</button>
+        <button class="btn btn-ghost btn-big" onclick="resetSession()" style="margin-top:8px">↺ Reset session</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-icon" style="background:#ffe8f0">🗂️</div>Active categories</div>
+        <div class="cat-pill" style="background:var(--faith-bg)"><span>✦</span><span style="color:var(--faith);font-weight:600;font-size:13px">Faith & Fortune</span></div>
+        <div class="cat-pill" style="background:var(--power-bg)"><span>⬡</span><span style="color:var(--power);font-weight:600;font-size:13px">Power & Achievement</span></div>
+        <div class="cat-pill" style="background:var(--self-bg)"><span>○</span><span style="color:var(--self);font-weight:600;font-size:13px">Identity & Self</span></div>
+        <div class="cat-pill" style="background:var(--world-bg)"><span>◻</span><span style="color:var(--world);font-weight:600;font-size:13px">Society & World</span></div>
+        <div class="cat-pill" style="background:var(--dark-bg)"><span>🕵️</span><span style="color:var(--dark);font-weight:600;font-size:13px">Dark Secrets</span></div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.7">Students type their answer directly — no oral required.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GAME ══ -->
+<div class="screen" id="screen-game">
+
+  <!-- WHEEL -->
+  <div class="screen active" id="wheel-screen">
+    <div class="game-heading">Who's writing next? ✍️</div>
+    <div class="game-sub">Spin the wheel to pick a student</div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-canvas" width="360" height="360"></canvas>
+      <div id="wheel-pointer"></div>
+      <div id="wheel-center" onclick="spinWheel()">SPIN</div>
+    </div>
+    <div id="spin-result">
+      <div id="result-name"></div>
+      <div id="result-sub"></div>
+    </div>
+    <div class="spin-btn-row">
+      <button class="btn-spin-main" id="btn-spin" onclick="spinWheel()">🎰 Spin the wheel</button>
+      <button class="btn-continue" id="btn-continue-cat" onclick="goToCategories()">Pick a category →</button>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="screen" id="cat-screen">
+    <div class="student-banner">
+      <div><span class="banner-label">Now writing ✍️</span><span class="banner-name" id="banner-name">—</span></div>
+      <button class="btn btn-ghost" onclick="goToWheel()" style="font-size:12px">← Back to wheel</button>
+    </div>
+    <div id="cat-grid"></div>
+  </div>
+
+  <!-- NUMBERS -->
+  <div class="screen" id="num-screen">
+    <div class="num-header">
+      <div id="num-badge-el" class="num-cat-badge">—</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--ink)" id="num-student-name">—</div>
+      <button class="btn btn-ghost" onclick="goToCategories()" style="font-size:12px;margin-left:auto">← Categories</button>
+    </div>
+    <div class="num-prompt">Pick a mystery number 🔢</div>
+    <div id="num-grid"></div>
+  </div>
+
+  <!-- QUESTION + WRITTEN ANSWER -->
+  <div class="screen" id="q-screen">
+    <div class="q-banner">
+      <div>
+        <span class="banner-label">Now writing ✍️</span>
+        <div class="banner-name" id="q-student-name">—</div>
+      </div>
+      <div class="q-progress-pill" id="q-progress">Q 1 / ?</div>
+    </div>
+
+    <div class="q-card" id="q-card">
+      <div class="q-cat-label" id="q-cat-label">—</div>
+      <div id="q-text"><span class="cursor"></span></div>
+    </div>
+
+    <div class="answer-zone">
+      <div class="answer-zone-header">
+        <div class="answer-zone-title">
+          ✍️ Your answer
+          <div class="wc-badge" id="wc-badge">0 words</div>
+        </div>
+        <div>
+          <div class="wc-progress"><div class="wc-fill" id="wc-fill"></div></div>
+          <div class="min-hint" id="min-hint">Minimum <span id="min-words-hint-val">20</span> words required</div>
+        </div>
+      </div>
+      <textarea id="answer-textarea" placeholder="Write your answer here in English…" oninput="onAnswerInput()"></textarea>
+      <div class="answer-zone-footer">
+        <div class="char-info"><span id="char-count">0</span> characters · <span id="word-count">0</span> words</div>
+        <div class="submit-row">
+          <button class="btn-skip-q" onclick="skipAnswer()">Skip ⏭</button>
+          <button class="btn-submit" id="btn-submit" onclick="submitAnswer()" disabled>
+            Submit answer ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="result-screen">
+    <div class="result-hero written" id="result-hero">
+      <span class="result-emoji" id="result-emoji">✍️</span>
+      <div class="result-student-tag" id="result-student-tag">—</div>
+      <div class="result-verdict-label" id="result-verdict-label">—</div>
+      <div class="result-message" id="result-message">—</div>
+    </div>
+
+    <div class="answer-preview" id="answer-preview" style="display:none">
+      <div class="answer-preview-label">Answer submitted</div>
+      <div class="answer-preview-q" id="preview-q">—</div>
+      <div class="answer-preview-text" id="preview-text">—</div>
+      <div class="answer-preview-meta">
+        <div class="answer-meta-chip" id="preview-wc">— words</div>
+        <div class="answer-meta-chip" id="preview-cc" style="background:var(--world-bg);color:var(--world)">— characters</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="transcript-header">📋 Session transcript <span style="font-size:11px;color:var(--ink3);font-family:'DM Sans',sans-serif;font-weight:400" id="t-count"></span></div>
+      <div id="transcript-list"></div>
+    </div>
+
+    <div class="result-actions" id="result-controls">
+      <button class="btn btn-primary" id="btn-next-student" onclick="nextStudent()">▶ Next student</button>
+      <button class="btn btn-ghost" onclick="switchTab('teacher')">⚙️ Setup</button>
+    </div>
+  </div>
+
+</div><!-- /screen-game -->
+
+<footer>
+  <div class="footer-left" id="footer-class">No class</div>
+  <div id="footer-progress"></div>
+  <div class="footer-right" id="footer-clock">00:00</div>
+</footer>
+
+</div>
+
+<script>
+// ════════════════════
+//  DATA
+// ════════════════════
+const CATEGORIES=[
+  {id:'faith',name:'Faith & Fortune',label:'faith',emoji:'🌟',desc:'16 questions',
+   questions:[
+    "Do you believe in fate, or do you think we shape our own future?",
+    "Has anything ever happened to you that felt like more than just luck?",
+    "What does success mean to you — really?",
+    "If you could change one decision you've made, what would it be?",
+    "Do you think being optimistic is a strength or a weakness?",
+    "Is there something you believe in that other people might find surprising?",
+    "What is the most important lesson you've learned so far in life?",
+    "Do you think hard work always leads to success?",
+    "What would you do differently if you had no fear of failing?",
+    "Is there something in life you're afraid of losing?",
+    "Do you think the future is something we can control?",
+    "What is one dream you have that you haven't told many people about?",
+    "Do you think there is such a thing as a wrong choice?",
+    "What gives you hope about the future?",
+    "Is happiness something you plan for, or something that just happens?",
+    "If you could give one piece of advice to your ten-year-old self, what would it be?"
+  ]},
+  {id:'power',name:'Power & Achievement',label:'power',emoji:'🏆',desc:'16 questions',
+   questions:[
+    "What is the achievement you're most proud of?",
+    "Do you think leadership is something you're born with, or something you learn?",
+    "Is ambition a quality you admire in people?",
+    "Have you ever had to stand up for yourself? What happened?",
+    "Do you think competition at school is healthy or harmful?",
+    "What motivates you more — the fear of failure or the desire to succeed?",
+    "Is it more important to be respected or to be liked?",
+    "Have you ever had to make a difficult decision? How did you handle it?",
+    "Do you think powerful people have more responsibilities than ordinary people?",
+    "What do you think is the difference between confidence and arrogance?",
+    "If you were in charge of your school for one day, what would you change?",
+    "Is it ever acceptable to bend the rules to get what you want?",
+    "What quality do you think is most important in a leader?",
+    "Have you ever had a role model? What made them admirable to you?",
+    "Is it better to be a specialist in one thing or good at many things?",
+    "What does the word 'success' actually mean to you at this point in your life?"
+  ]},
+  {id:'self',name:'Identity & Self',label:'self',emoji:'🪞',desc:'16 questions',
+   questions:[
+    "How would you describe yourself in three words — honestly?",
+    "What do you like most about who you are?",
+    "Is there something you wish people understood about you better?",
+    "Do you think you're the same person at school as you are at home?",
+    "What's something you've changed your mind about in the last year?",
+    "Do you feel more yourself when you're alone or with other people?",
+    "Is there a part of your personality you're still figuring out?",
+    "What kind of person do you want to become in the next ten years?",
+    "Do you think your generation is misunderstood by adults?",
+    "What's something you've had to work hard to get better at?",
+    "Is there a book, film, or song that changed the way you see yourself?",
+    "Do you think it's important to fit in, or is it better to stand out?",
+    "What's the most important value you live by?",
+    "Is there something you used to believe that you no longer think is true?",
+    "What makes you feel most like yourself?",
+    "If someone who didn't know you had to describe you, what do you think they'd say?"
+  ]},
+  {id:'world',name:'Society & World',label:'world',emoji:'🌍',desc:'16 questions',
+   questions:[
+    "Do you think the world is getting better or worse? Give a reason.",
+    "Is social media more of a positive or negative force in society?",
+    "Should celebrities use their platform to talk about political issues?",
+    "What do you think is the biggest challenge your generation will face?",
+    "Do you think young people today have more or less freedom than previous generations?",
+    "Is it the responsibility of wealthy countries to help poorer ones?",
+    "Do you think school prepares students well for real life?",
+    "Is climate change something individuals can actually do something about?",
+    "Should voting be compulsory when you turn 18?",
+    "Do you think social class still matters in society today?",
+    "Is it possible to be truly unbiased when watching the news?",
+    "Should there be limits on freedom of speech?",
+    "Do you think sport has the power to bring people together?",
+    "Is the English language becoming too dominant in the world?",
+    "Do you think artificial intelligence is more of a threat or an opportunity?",
+    "What is one thing you would change about the world if you could?"
+  ]},
+  {id:'dark',name:'Dark Secrets',label:'dark',emoji:'🕵️',desc:'20 questions',
+   questions:[
+    "What is something you have done that you've never fully admitted to anyone?",
+    "Have you ever let someone else take the blame for something that was your fault?",
+    "What is the biggest lie you've told at school — and did you get away with it?",
+    "Is there a rule you regularly break and feel zero guilt about?",
+    "Have you ever pretended to like something just to fit in with a group?",
+    "What is something you're secretly much better at than people think?",
+    "Have you ever said you'd read a book or watched a film — and hadn't?",
+    "What is an opinion you hold that you'd never say out loud in class?",
+    "Have you ever done something kind without wanting anyone to know about it?",
+    "Is there a subject at school you secretly find fascinating but would never admit to?",
+    "Have you ever been jealous of a friend — and how did you handle it?",
+    "What's the most embarrassing thing you've searched for online?",
+    "Is there something you are afraid of that would surprise people who know you?",
+    "Have you ever pretended not to know the answer in class when you actually did?",
+    "What's a talent or skill you have that almost nobody knows about?",
+    "Have you ever changed your mind about someone completely — for better or worse?",
+    "Is there something you do when you're alone that you'd be embarrassed about if others saw?",
+    "What is the most rebellious thing you've ever done — even in a small way?",
+    "Have you ever disagreed with a teacher but stayed silent? What stopped you from speaking?",
+    "If your friends could read your mind for just one minute, what would surprise them most?"
+  ]}
+];
+
+// ════════════════════
+//  STATE
+// ════════════════════
+let S={
+  className:'',students:[],done:[],transcript:[],
+  currentStudent:null,currentCat:null,currentQNum:null,
+  spinning:false,startTime:Date.now(),minWords:20
+};
+
+// ════════════════════
+//  CLOCK
+// ════════════════════
+setInterval(()=>{
+  const e=Math.floor((Date.now()-S.startTime)/1000);
+  const t=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
+  document.getElementById('footer-clock').textContent=t;
+  document.getElementById('header-timer').textContent=t;
+},1000);
+
+// ════════════════════
+//  TABS
+// ════════════════════
+function switchTab(t){
+  ['teacher','game'].forEach(id=>{
+    document.getElementById('screen-'+id).classList.toggle('active',id===t);
+    document.getElementById('tab-'+id).classList.toggle('active',id===t);
+  });
+  if(t==='game')refreshWheelScreen();
+}
+
+// ════════════════════
+//  MIN WORDS
+// ════════════════════
+function updateMinWords(){
+  const v=parseInt(document.getElementById('min-words-slider').value);
+  S.minWords=v;
+  document.getElementById('min-words-display').textContent=v;
+  document.getElementById('min-words-hint-val').textContent=v;
+}
+
+// ════════════════════
+//  TEACHER
+// ════════════════════
+function setClassName(){
+  const v=document.getElementById('class-name-input').value.trim();
+  if(!v)return;
+  S.className=v;
+  document.getElementById('class-chip').textContent=v;
+  document.getElementById('class-chip').className='chip active-class';
+  document.getElementById('footer-class').textContent=v;
+  document.getElementById('info-class').textContent=v;
+  updateInfo();
+}
+function addStudent(name){
+  const inp=document.getElementById('student-input');
+  const n=(name||inp.value).trim();
+  if(!n)return;
+  if(S.students.some(s=>s.toLowerCase()===n.toLowerCase())){inp.value='';return;}
+  S.students.push(n);inp.value='';
+  renderStudentList();updateInfo();
+}
+function importBulk(){
+  const raw=document.getElementById('bulk-input').value;
+  raw.split('\n').map(l=>l.trim()).filter(Boolean).forEach(n=>{
+    if(!S.students.some(s=>s.toLowerCase()===n.toLowerCase()))S.students.push(n);
+  });
+  document.getElementById('bulk-input').value='';
+  renderStudentList();updateInfo();
+}
+function clearAll(){
+  if(!confirm('Remove all students?'))return;
+  S.students=[];S.done=[];renderStudentList();updateInfo();drawWheel();
+}
+function removeStudent(i){
+  S.students.splice(i,1);
+  S.done=S.done.filter(d=>d<S.students.length);
+  renderStudentList();updateInfo();
+}
+function renderStudentList(){
+  const ul=document.getElementById('student-list');ul.innerHTML='';
+  if(!S.students.length){
+    ul.innerHTML='<li class="no-students">No students yet — add some above ☝️</li>';
+    document.getElementById('student-count').textContent='0 students';return;
+  }
+  document.getElementById('student-count').textContent=S.students.length+' student'+(S.students.length!==1?'s':'');
+  S.students.forEach((s,i)=>{
+    const li=document.createElement('li');
+    li.className='student-item'+(S.done.includes(i)?' done':'');
+    li.innerHTML=`<span class="snum">${String(i+1).padStart(2,'0')}</span><span class="sname">${s}</span><button class="sdel" onclick="removeStudent(${i})">✕</button>`;
+    ul.appendChild(li);
+  });
+}
+function updateInfo(){
+  const t=S.students.length,d=S.done.length;
+  document.getElementById('info-count').textContent=t;
+  document.getElementById('info-remaining').textContent=t-d;
+  document.getElementById('info-done').textContent=d;
+  updateFooterProgress();
+}
+function updateFooterProgress(){
+  const fp=document.getElementById('footer-progress');fp.innerHTML='';
+  S.students.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='fp-dot'+(S.done.includes(i)?' done':(i===S.currentStudent?' current':''));
+    fp.appendChild(d);
+  });
+}
+function resetSession(){
+  S.done=[];S.transcript=[];S.currentStudent=null;
+  renderStudentList();updateInfo();
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('used'));
+  switchTab('teacher');
+}
+function startGame(){
+  if(!S.students.length){alert('Please add at least one student first! 👆');return;}
+  switchTab('game');
+}
+
+// ════════════════════
+//  WHEEL
+// ════════════════════
+const WCOLS=['#6c47ff','#ff4d8d','#00c2a8','#ffb800','#ff6b35','#4fc3f7','#a78bfa','#fb7185','#34d399','#fbbf24','#f97316','#38bdf8','#c084fc','#f472b6','#4ade80','#facc15'];
+let wAngle=0;
+
+function getActive(){return S.students.map((s,i)=>({name:s,idx:i})).filter(s=>!S.done.includes(s.idx));}
+
+function refreshWheelScreen(){
+  showGame('wheel-screen');drawWheel();
+  document.getElementById('result-name').textContent='';
+  document.getElementById('result-name').style.display='none';
+  document.getElementById('result-sub').textContent='';
+  document.getElementById('btn-continue-cat').style.display='none';
+  document.getElementById('btn-spin').style.display='inline-flex';
+  // sync min words hint
+  document.getElementById('min-words-hint-val').textContent=S.minWords;
+}
+
+function drawWheel(){
+  const cv=document.getElementById('wheel-canvas'),ctx=cv.getContext('2d'),cx=cv.width/2,cy=cv.height/2,r=cx-8;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  const students=getActive();
+  if(!students.length){
+    ctx.fillStyle='#f0eef8';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#8f8aaa';ctx.font='bold 15px Syne,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('All done! 🎉',cx,cy);return;
+  }
+  const slice=Math.PI*2/students.length;
+  students.forEach((s,i)=>{
+    const a=wAngle+i*slice;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+slice);ctx.closePath();
+    ctx.fillStyle=WCOLS[i%WCOLS.length];ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=2;ctx.stroke();
+    const mid=a+slice/2,lx=cx+Math.cos(mid)*r*.65,ly=cy+Math.sin(mid)*r*.65;
+    ctx.save();ctx.translate(lx,ly);ctx.rotate(mid+Math.PI/2);
+    ctx.fillStyle='rgba(255,255,255,.92)';ctx.font='bold 12px Syne,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    let label=s.name;const mw=r*.5;
+    if(ctx.measureText(label).width>mw)label=label.substring(0,Math.floor(mw/7.5))+'…';
+    ctx.fillText(label,0,0);ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=4;ctx.stroke();
+}
+
+function spinWheel(){
+  if(S.spinning)return;
+  const students=getActive();
+  if(!students.length){alert('All students have already answered! 🎉');return;}
+  S.spinning=true;
+  document.getElementById('result-name').style.display='none';
+  document.getElementById('btn-continue-cat').style.display='none';
+  document.getElementById('btn-spin').style.display='none';
+  const ti=Math.floor(Math.random()*students.length);
+  const slice=Math.PI*2/students.length;
+  const tA=-(ti*slice+slice/2)+Math.PI*2*(6+Math.floor(Math.random()*4));
+  const diff=((tA-wAngle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)+Math.PI*2*5;
+  const dur=3200+Math.random()*1400,start=performance.now(),startA=wAngle;
+  function ease(t){return 1-Math.pow(1-t,4);}
+  (function frame(now){
+    const t=Math.min(1,(now-start)/dur);
+    wAngle=startA+diff*ease(t);drawWheel();
+    if(t<1){requestAnimationFrame(frame);}
+    else{
+      S.spinning=false;S.currentStudent=students[ti].idx;
+      const name=students[ti].name;
+      const el=document.getElementById('result-name');
+      el.textContent=name;el.style.display='block';
+      document.getElementById('result-sub').textContent='has been selected!';
+      document.getElementById('btn-continue-cat').style.display='inline-flex';
+      document.getElementById('btn-spin').style.display='inline-flex';
+      playBeep(660,.08);
+    }
+  })(start);
+  requestAnimationFrame(n=>{ /* triggers first frame */ });
+  // re-trigger via proper animation loop
+  setTimeout(()=>{ requestAnimationFrame(function loop(now){ const t=Math.min(1,(now-start)/dur); wAngle=startA+diff*ease(t); drawWheel(); if(t<1)requestAnimationFrame(loop); else{ S.spinning=false;S.currentStudent=students[ti].idx; const name=students[ti].name; const el=document.getElementById('result-name'); el.textContent=name;el.style.display='block'; document.getElementById('result-sub').textContent='has been selected!'; document.getElementById('btn-continue-cat').style.display='inline-flex'; document.getElementById('btn-spin').style.display='inline-flex'; playBeep(660,.08); } }); },0);
+}
+
+// cleaner spin function override
+(function(){
+  const _spin=window.spinWheel;
+  window.spinWheel=function(){
+    if(S.spinning)return;
+    const students=getActive();
+    if(!students.length){alert('All students have already answered! 🎉');return;}
+    S.spinning=true;
+    document.getElementById('result-name').style.display='none';
+    document.getElementById('btn-continue-cat').style.display='none';
+    document.getElementById('btn-spin').style.display='none';
+    const ti=Math.floor(Math.random()*students.length);
+    const slice=Math.PI*2/students.length;
+    const tA=-(ti*slice+slice/2)+Math.PI*2*(6+Math.floor(Math.random()*4));
+    const diff=((tA-wAngle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)+Math.PI*2*5;
+    const dur=3200+Math.random()*1400,t0=performance.now(),a0=wAngle;
+    function ease(t){return 1-Math.pow(1-t,4);}
+    function frame(now){
+      const t=Math.min(1,(now-t0)/dur);
+      wAngle=a0+diff*ease(t);drawWheel();
+      if(t<1){requestAnimationFrame(frame);}
+      else{
+        S.spinning=false;S.currentStudent=students[ti].idx;
+        const name=students[ti].name;
+        const el=document.getElementById('result-name');
+        el.textContent=name;el.style.display='block';
+        document.getElementById('result-sub').textContent='has been selected!';
+        document.getElementById('btn-continue-cat').style.display='inline-flex';
+        document.getElementById('btn-spin').style.display='inline-flex';
+        playBeep(660,.08);
+      }
+    }
+    requestAnimationFrame(frame);
+  };
+})();
+
+// ════════════════════
+//  CATEGORIES
+// ════════════════════
+function goToWheel(){refreshWheelScreen();}
+function goToCategories(){
+  if(S.currentStudent===null)return;
+  document.getElementById('banner-name').textContent=S.students[S.currentStudent];
+  const grid=document.getElementById('cat-grid');grid.innerHTML='';
+  CATEGORIES.forEach(cat=>{
+    const div=document.createElement('div');
+    div.className='cat-card '+cat.label;div.setAttribute('data-id',cat.id);
+    div.innerHTML=`<div class="cat-icon-wrap">${cat.emoji}</div><div class="cat-name">${cat.name}</div><div class="cat-count">${cat.desc}</div>`;
+    div.onclick=()=>selectCat(cat);grid.appendChild(div);
+  });
+  showGame('cat-screen');
+}
+function selectCat(cat){
+  S.currentCat=cat;
+  document.getElementById('num-badge-el').textContent=cat.name;
+  document.getElementById('num-badge-el').className='num-cat-badge '+cat.label;
+  document.getElementById('num-student-name').textContent=S.students[S.currentStudent];
+  const grid=document.getElementById('num-grid');grid.innerHTML='';
+  cat.questions.forEach((_,i)=>{
+    const btn=document.createElement('button');btn.className='num-btn';
+    btn.textContent=String(i+1).padStart(2,'0');
+    btn.onclick=()=>selectQ(i+1);grid.appendChild(btn);
+  });
+  showGame('num-screen');playBeep(440,.06);
+}
+
+// ════════════════════
+//  QUESTION
+// ════════════════════
+function selectQ(n){
+  S.currentQNum=n;
+  const cat=S.currentCat,q=cat.questions[n-1];
+  document.getElementById('q-card').className='q-card '+cat.label;
+  document.getElementById('q-cat-label').textContent=cat.emoji+' '+cat.name+' — question '+n;
+  document.getElementById('q-student-name').textContent=S.students[S.currentStudent];
+  document.getElementById('q-progress').textContent='Q '+(S.done.length+1)+' / '+S.students.length;
+  const qEl=document.getElementById('q-text');qEl.innerHTML='<span class="cursor"></span>';
+
+  // Reset answer zone
+  document.getElementById('answer-textarea').value='';
+  document.getElementById('char-count').textContent='0';
+  document.getElementById('word-count').textContent='0';
+  document.getElementById('wc-badge').textContent='0 words';
+  document.getElementById('wc-fill').style.width='0%';
+  document.getElementById('btn-submit').disabled=true;
+  document.getElementById('min-hint').className='min-hint';
+  document.getElementById('min-words-hint-val').textContent=S.minWords;
+
+  showGame('q-screen');playBeep(330,.05);
+  let i=0;
+  const iv=setInterval(()=>{
+    qEl.innerHTML=q.slice(0,i)+'<span class="cursor"></span>';i++;
+    if(i>q.length){clearInterval(iv);qEl.innerHTML=q;document.getElementById('answer-textarea').focus();}
+  },20);
+}
+
+// ════════════════════
+//  ANSWER INPUT
+// ════════════════════
+function countWords(str){
+  return str.trim().split(/\s+/).filter(w=>w.length>0).length;
+}
+function onAnswerInput(){
+  const val=document.getElementById('answer-textarea').value;
+  const chars=val.length;
+  const words=countWords(val);
+  document.getElementById('char-count').textContent=chars;
+  document.getElementById('word-count').textContent=words;
+  document.getElementById('wc-badge').textContent=words+' word'+(words!==1?'s':'');
+  const pct=Math.min(100,Math.round((words/S.minWords)*100));
+  document.getElementById('wc-fill').style.width=pct+'%';
+  const reached=words>=S.minWords;
+  document.getElementById('btn-submit').disabled=!reached;
+  const hint=document.getElementById('min-hint');
+  hint.className='min-hint'+(reached?' reached':'');
+  hint.innerHTML=reached
+    ?'✓ Minimum reached — ready to submit!'
+    :`Minimum <span id="min-words-hint-val">${S.minWords}</span> words — <strong>${Math.max(0,S.minWords-words)}</strong> to go`;
+}
+
+// ════════════════════
+//  SUBMIT / SKIP
+// ════════════════════
+function submitAnswer(){
+  const answer=document.getElementById('answer-textarea').value.trim();
+  const words=countWords(answer);
+  if(words<S.minWords)return;
+  saveAndShowResult(answer,words,false);
+}
+function skipAnswer(){
+  if(!confirm('Skip this question? The student will be marked as done.'))return;
+  saveAndShowResult('',0,true);
+}
+
+function saveAndShowResult(answer,words,skipped){
+  const cat=S.currentCat,q=cat.questions[S.currentQNum-1];
+  const name=S.students[S.currentStudent];
+  S.transcript.push({name,question:q,answer,words,cat:cat.name,label:cat.label,emoji:cat.emoji,skipped});
+  if(!S.done.includes(S.currentStudent))S.done.push(S.currentStudent);
+  renderStudentList();updateInfo();
+
+  if(skipped){
+    document.getElementById('result-hero').className='result-hero skip';
+    document.getElementById('result-emoji').textContent='😶';
+    document.getElementById('result-verdict-label').textContent='Skipped';
+    document.getElementById('result-verdict-label').style.color='var(--ink3)';
+    document.getElementById('result-message').textContent='This student passed. They can always try again next time!';
+    document.getElementById('answer-preview').style.display='none';
+  } else {
+    document.getElementById('result-hero').className='result-hero written';
+    document.getElementById('result-emoji').textContent='✍️';
+    const label=words>=S.minWords*2?'Excellent answer!':words>=S.minWords*1.4?'Good answer!':'Answer submitted!';
+    document.getElementById('result-verdict-label').textContent=label;
+    document.getElementById('result-verdict-label').style.color='var(--accent)';
+    document.getElementById('result-message').textContent=
+      words>=S.minWords*2
+        ? 'A thorough and detailed response — great work! 🌟'
+        : words>=S.minWords*1.4
+          ? 'A solid answer with good detail. Well done!'
+          : 'Answer recorded. Could you develop it a little more next time?';
+    document.getElementById('preview-q').textContent='"'+q+'"';
+    document.getElementById('preview-text').textContent=answer;
+    document.getElementById('preview-wc').textContent=words+' words';
+    document.getElementById('preview-cc').textContent=answer.length+' characters';
+    document.getElementById('answer-preview').style.display='block';
+  }
+
+  document.getElementById('result-student-tag').textContent=name;
+
+  // Transcript
+  const list=document.getElementById('transcript-list');list.innerHTML='';
+  document.getElementById('t-count').textContent='('+S.transcript.length+' student'+(S.transcript.length!==1?'s':'')+')';
+  S.transcript.forEach(t=>{
+    const d=document.createElement('div');d.className='transcript-item';
+    d.innerHTML=`
+      <div class="ti-header">
+        <div class="t-name">${t.name}</div>
+        <div class="t-meta">
+          <span class="t-cat ${t.label}">${t.emoji} ${t.cat}</span>
+          ${t.skipped?'':'<span class="t-wc">'+t.words+' words</span>'}
+        </div>
+      </div>
+      <div class="ti-body">
+        <div class="t-q-text">${t.question}</div>
+        ${t.skipped
+          ?'<div class="t-skipped">— skipped —</div>'
+          :'<div class="t-answer">'+escHtml(t.answer)+'</div>'}
+      </div>`;
+    list.appendChild(d);
+  });
+
+  const rem=getActive().length;
+  const nb=document.getElementById('btn-next-student');
+  nb.textContent=rem>0?'▶ Next student':'🏁 All done!';
+  nb.onclick=rem>0?nextStudent:()=>alert('All students have written their answers — great session! 🎉');
+  showGame('result-screen');
+  playBeep(skipped?330:880,.06);
+}
+
+function nextStudent(){refreshWheelScreen();}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ════════════════════
+//  UTILS
+// ════════════════════
+function showGame(id){
+  document.querySelectorAll('#screen-game .screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function playBeep(freq,vol){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value=freq||660;
+    g.gain.setValueAtTime(vol||.06,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);
+    o.start();o.stop(ctx.currentTime+.18);
+  }catch(e){}
+}
+
+// init
+drawWheel();updateInfo();
+</script>
+</body>
+</html>
